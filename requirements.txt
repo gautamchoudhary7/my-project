@@ -1,0 +1,23 @@
+# CrimeVision AI - Intelligent Multimodal Forensic Analysis Platform
+# Platform ID: 6ac4c9851dcde6d7857c163b
+# Requirements & Dependencies
+
+streamlit>=1.35.0
+reportlab>=4.1.0
+pillow>=10.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+pandas>=2.0.0
+plotly>=5.18.0
+
+# LLM Providers & Computer Vision
+groq>=0.9.0
+google-genai>=1.0.0
+google-generativeai>=0.8.0
+ultralytics>=8.0.0
+torch>=2.0.0
+
+# REST API Microservice
+flask>=3.0.0
+flask-cors>=4.0.0
+requests>=2.31.0
