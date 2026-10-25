@@ -562,7 +562,7 @@ with tab4:
 
     # Cross-Modal Correlations Expander
     with st.expander("🔗 Cross-Modal Forensic Correlations (Triangulated Evidence)", expanded=True):
-        correlations = get_cross_modal_correlations(master_ledger)
+        correlations = get_cross_modal_correlations(master_ledger, case_info=case)
         for c in correlations:
             st.markdown(f"""
                 <div class="forensic-card" style="border-left: 3px solid #00f0ff; margin-bottom: 8px;">
@@ -583,19 +583,31 @@ with tab4:
     st.markdown("#### 💬 Grounded AI Evidence Interrogation (Zero Hallucination)")
     st.caption("Query the multimodal evidence ledger in natural language. Answers strictly cite Evidence IDs `[EVD-...]`.")
 
-    # Suggested Prompts
+    # Suggested Prompts (Case-Aware)
     st.markdown("**Suggested Forensic Inquiries:**")
     prompt_cols = st.columns(3)
     suggested_q = None
-    with prompt_cols[0]:
-        if st.button("🔫 Was a weapon visible before suspect fled?", use_container_width=True):
-            suggested_q = "Was a weapon visible before the suspect fled?"
-    with prompt_cols[1]:
-        if st.button("🚗 What did witness say about getaway vehicle?", use_container_width=True):
-            suggested_q = "What did the witness say about the vehicle and getaway route?"
-    with prompt_cols[2]:
-        if st.button("🚪 What physical evidence shows forced entry?", use_container_width=True):
-            suggested_q = "What physical evidence indicates forced entry and commercial burglary?"
+
+    if "4192" in case["case_id"]:
+        with prompt_cols[0]:
+            if st.button("💥 Where was gunshot discharged and what caliber?", use_container_width=True):
+                suggested_q = "Where was the gunshot discharged and what weapon caliber casing was recovered?"
+        with prompt_cols[1]:
+            if st.button("✂️ What tool was used to breach the fence?", use_container_width=True):
+                suggested_q = "What physical tool evidence was used to breach the perimeter fence?"
+        with prompt_cols[2]:
+            if st.button("🏃 Which direction did suspects flee and how fast?", use_container_width=True):
+                suggested_q = "Which direction did the suspects flee and what was their recorded speed?"
+    else:
+        with prompt_cols[0]:
+            if st.button("🔫 Was a weapon visible before suspect fled?", use_container_width=True):
+                suggested_q = "Was a weapon visible before the suspect fled?"
+        with prompt_cols[1]:
+            if st.button("🚗 What did witness say about getaway vehicle?", use_container_width=True):
+                suggested_q = "What did the witness say about the vehicle and getaway route?"
+        with prompt_cols[2]:
+            if st.button("🚪 What physical evidence shows forced entry?", use_container_width=True):
+                suggested_q = "What physical evidence indicates forced entry and commercial burglary?"
 
     # Chat display container
     chat_container = st.container()

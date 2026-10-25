@@ -129,13 +129,29 @@ class TestCrimeVisionForensics(unittest.TestCase):
         correlations = get_cross_modal_correlations(master_ledger)
         self.assertGreaterEqual(len(correlations), 2)
 
-        # Test Grounded RAG query
+        # Test Grounded RAG query for Case 1
         ctx = format_ledger_context_for_llm(master_ledger, self.case)
         llm = ForensicLLMService(provider="demo")
         res = llm.generate_chat_response("Was a weapon visible before the suspect fled?", ctx)
         self.assertIn("answer", res)
         self.assertGreater(len(res["citations"]), 0)
         self.assertTrue(any("EVD-" in c for c in res["citations"]))
+
+        # Test Grounded RAG query for Case 2 (Harbor Berth 14)
+        case2 = self.cases["CASE-2026-CR-4192"]
+        ledger2 = build_unified_master_ledger(
+            case_info=case2,
+            image_detections=case2["image_detections"],
+            audio_transcript=case2["audio_transcript"],
+            video_events=case2["video_events"]
+        )
+        ctx2 = format_ledger_context_for_llm(ledger2, case2)
+        res2_w = llm.generate_chat_response("What weapon was found?", ctx2)
+        self.assertIn(".45 ACP", res2_w["answer"])
+        self.assertIn("EVD-IMG-2026-001 (Marker #2)", res2_w["citations"])
+
+        res2_l = llm.generate_chat_response("Where did this incident occur?", ctx2)
+        self.assertIn("Berth 14", res2_l["answer"])
 
     def test_06_court_admissible_pdf_export(self):
         """Validates compilation of court-admissible ReportLab PDF document."""
