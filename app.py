@@ -4,9 +4,18 @@ Skill Wallet Capstone Project 2 | Platform ID: 6ac4c9851dcde6d7857c163b
 Production Streamlit Application
 """
 import os
+import sys
 import io
 import datetime
 import streamlit as st
+
+# Auto-dispatch: If executed via bare 'python app.py' or VS Code 'Run' button,
+# automatically relaunch through the Streamlit web CLI.
+if not st.runtime.exists():
+    from streamlit.web import cli as stcli
+    sys.argv = ["streamlit", "run", os.path.abspath(__file__)]
+    sys.exit(stcli.main())
+
 import numpy as np
 import pandas as pd
 from PIL import Image
